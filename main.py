@@ -22,6 +22,7 @@ app = Flask(__name__, template_folder='templates')
 
 def create_app():
     from models import SignalType
+    from models import Data, Signal
 
     app = Flask(__name__, template_folder='templates')  # ✅
     app.secret_key = os.environ.get("SESSION_SECRET", "development_key")
