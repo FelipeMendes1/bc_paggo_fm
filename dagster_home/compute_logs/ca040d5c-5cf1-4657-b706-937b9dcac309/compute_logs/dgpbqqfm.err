@@ -1,0 +1,6 @@
+2025-05-01 14:27:40 +0000 - dagster - DEBUG - etl_pipeline_job - ca040d5c-5cf1-4657-b706-937b9dcac309 - 4315 - LOGS_CAPTURED - Started capturing logs in process (pid: 4315).
+2025-05-01 14:27:40 +0000 - dagster - DEBUG - etl_pipeline_job - ca040d5c-5cf1-4657-b706-937b9dcac309 - 4315 - get_end_datetime - STEP_START - Started execution of step "get_end_datetime".
+2025-05-01 14:27:41 +0000 - dagster - DEBUG - etl_pipeline_job - ca040d5c-5cf1-4657-b706-937b9dcac309 - 4315 - get_end_datetime - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
+2025-05-01 14:27:41 +0000 - dagster - DEBUG - etl_pipeline_job - ca040d5c-5cf1-4657-b706-937b9dcac309 - get_end_datetime - Writing file at: /opt/dagster/app/dagster_home/storage/storage/ca040d5c-5cf1-4657-b706-937b9dcac309/get_end_datetime/result using PickledObjectFilesystemIOManager...
+2025-05-01 14:27:41 +0000 - dagster - DEBUG - etl_pipeline_job - ca040d5c-5cf1-4657-b706-937b9dcac309 - 4315 - get_end_datetime - HANDLED_OUTPUT - Handled output "result" using IO manager "io_manager"
+2025-05-01 14:27:41 +0000 - dagster - DEBUG - etl_pipeline_job - ca040d5c-5cf1-4657-b706-937b9dcac309 - 4315 - get_end_datetime - STEP_SUCCESS - Finished execution of step "get_end_datetime" in 405ms.

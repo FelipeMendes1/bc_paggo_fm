@@ -1,0 +1,9 @@
+2025-05-01 14:29:25 +0000 - dagster - DEBUG - etl_pipeline_job - a4d5c929-f56a-4df5-8839-bfb05ca0626a - 5779 - LOGS_CAPTURED - Started capturing logs in process (pid: 5779).
+2025-05-01 14:29:25 +0000 - dagster - DEBUG - etl_pipeline_job - a4d5c929-f56a-4df5-8839-bfb05ca0626a - 5779 - initialize_target_db_op - STEP_START - Started execution of step "initialize_target_db_op".
+ERROR:etl.database:Error initializing target database: (psycopg2.OperationalError) could not translate host name "target_db" to address: Name or service not known
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-05-01 14:29:29 +0000 - dagster - DEBUG - etl_pipeline_job - a4d5c929-f56a-4df5-8839-bfb05ca0626a - 5779 - initialize_target_db_op - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
+2025-05-01 14:29:29 +0000 - dagster - DEBUG - etl_pipeline_job - a4d5c929-f56a-4df5-8839-bfb05ca0626a - initialize_target_db_op - Writing file at: /opt/dagster/app/dagster_home/storage/storage/a4d5c929-f56a-4df5-8839-bfb05ca0626a/initialize_target_db_op/result using PickledObjectFilesystemIOManager...
+2025-05-01 14:29:29 +0000 - dagster - DEBUG - etl_pipeline_job - a4d5c929-f56a-4df5-8839-bfb05ca0626a - 5779 - initialize_target_db_op - HANDLED_OUTPUT - Handled output "result" using IO manager "io_manager"
+2025-05-01 14:29:29 +0000 - dagster - DEBUG - etl_pipeline_job - a4d5c929-f56a-4df5-8839-bfb05ca0626a - 5779 - initialize_target_db_op - STEP_SUCCESS - Finished execution of step "initialize_target_db_op" in 4.1s.

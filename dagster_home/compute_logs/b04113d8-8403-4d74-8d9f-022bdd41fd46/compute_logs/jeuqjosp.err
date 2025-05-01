@@ -1,0 +1,7 @@
+2025-05-01 15:17:48 +0000 - dagster - DEBUG - etl_pipeline_job - b04113d8-8403-4d74-8d9f-022bdd41fd46 - 1855 - LOGS_CAPTURED - Started capturing logs in process (pid: 1855).
+2025-05-01 15:17:48 +0000 - dagster - DEBUG - etl_pipeline_job - b04113d8-8403-4d74-8d9f-022bdd41fd46 - 1855 - initialize_target_db_op - STEP_START - Started execution of step "initialize_target_db_op".
+INFO:etl.database:Target database tables created or already exist
+2025-05-01 15:17:48 +0000 - dagster - DEBUG - etl_pipeline_job - b04113d8-8403-4d74-8d9f-022bdd41fd46 - 1855 - initialize_target_db_op - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
+2025-05-01 15:17:48 +0000 - dagster - DEBUG - etl_pipeline_job - b04113d8-8403-4d74-8d9f-022bdd41fd46 - initialize_target_db_op - Writing file at: /opt/dagster/app/dagster_home/storage/storage/b04113d8-8403-4d74-8d9f-022bdd41fd46/initialize_target_db_op/result using PickledObjectFilesystemIOManager...
+2025-05-01 15:17:49 +0000 - dagster - DEBUG - etl_pipeline_job - b04113d8-8403-4d74-8d9f-022bdd41fd46 - 1855 - initialize_target_db_op - HANDLED_OUTPUT - Handled output "result" using IO manager "io_manager"
+2025-05-01 15:17:49 +0000 - dagster - DEBUG - etl_pipeline_job - b04113d8-8403-4d74-8d9f-022bdd41fd46 - 1855 - initialize_target_db_op - STEP_SUCCESS - Finished execution of step "initialize_target_db_op" in 356ms.

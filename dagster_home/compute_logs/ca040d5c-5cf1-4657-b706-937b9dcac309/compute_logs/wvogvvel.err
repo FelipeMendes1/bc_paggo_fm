@@ -1,0 +1,75 @@
+2025-05-01 14:27:45 +0000 - dagster - DEBUG - etl_pipeline_job - ca040d5c-5cf1-4657-b706-937b9dcac309 - 4441 - LOGS_CAPTURED - Started capturing logs in process (pid: 4441).
+2025-05-01 14:27:46 +0000 - dagster - DEBUG - etl_pipeline_job - ca040d5c-5cf1-4657-b706-937b9dcac309 - 4441 - extract_data_op - STEP_START - Started execution of step "extract_data_op".
+2025-05-01 14:27:46 +0000 - dagster - DEBUG - etl_pipeline_job - ca040d5c-5cf1-4657-b706-937b9dcac309 - extract_data_op - Loading file from: /opt/dagster/app/dagster_home/storage/storage/ca040d5c-5cf1-4657-b706-937b9dcac309/get_start_datetime/result using PickledObjectFilesystemIOManager...
+2025-05-01 14:27:46 +0000 - dagster - DEBUG - etl_pipeline_job - ca040d5c-5cf1-4657-b706-937b9dcac309 - 4441 - extract_data_op - LOADED_INPUT - Loaded input "start_date" using input manager "io_manager", from output "result" of step "get_start_datetime"
+2025-05-01 14:27:46 +0000 - dagster - DEBUG - etl_pipeline_job - ca040d5c-5cf1-4657-b706-937b9dcac309 - extract_data_op - Loading file from: /opt/dagster/app/dagster_home/storage/storage/ca040d5c-5cf1-4657-b706-937b9dcac309/get_end_datetime/result using PickledObjectFilesystemIOManager...
+2025-05-01 14:27:46 +0000 - dagster - DEBUG - etl_pipeline_job - ca040d5c-5cf1-4657-b706-937b9dcac309 - 4441 - extract_data_op - LOADED_INPUT - Loaded input "end_date" using input manager "io_manager", from output "result" of step "get_end_datetime"
+2025-05-01 14:27:46 +0000 - dagster - DEBUG - etl_pipeline_job - ca040d5c-5cf1-4657-b706-937b9dcac309 - 4441 - extract_data_op - STEP_INPUT - Got input "start_date" of type "Any". (Type check passed).
+2025-05-01 14:27:46 +0000 - dagster - DEBUG - etl_pipeline_job - ca040d5c-5cf1-4657-b706-937b9dcac309 - 4441 - extract_data_op - STEP_INPUT - Got input "end_date" of type "Any". (Type check passed).
+INFO:etl.transform:Fetching data from http://api:8000/data with params: {'start_date': '2025-04-30T00:00:00', 'end_date': '2025-04-30T23:59:59.999999', 'columns': 'wind_speed,power'}
+DEBUG:httpcore.connection:connect_tcp.started host='api' port=8000 local_address=None timeout=60.0 socket_options=None
+DEBUG:httpcore.connection:connect_tcp.failed exception=ConnectError(gaierror(-2, 'Name or service not known'))
+ERROR:etl.transform:HTTP error fetching data from API: [Errno -2] Name or service not known
+2025-05-01 14:27:50 +0000 - dagster - ERROR - etl_pipeline_job - ca040d5c-5cf1-4657-b706-937b9dcac309 - 4441 - extract_data_op - STEP_FAILURE - Execution of step "extract_data_op" failed.
+
+dagster._core.errors.DagsterExecutionStepExecutionError: Error occurred while executing op "extract_data_op"::
+
+httpx.ConnectError: [Errno -2] Name or service not known
+
+Stack Trace:
+  File "/usr/local/lib/python3.9/site-packages/dagster/_core/execution/plan/utils.py", line 56, in op_execution_error_boundary
+    yield
+  File "/usr/local/lib/python3.9/site-packages/dagster/_utils/__init__.py", line 391, in iterate_with_context
+    next_output = next(iterator)
+  File "/usr/local/lib/python3.9/site-packages/dagster/_core/execution/plan/compute_generator.py", line 129, in _coerce_op_compute_fn_to_iterator
+    result = invoke_compute_fn(
+  File "/usr/local/lib/python3.9/site-packages/dagster/_core/execution/plan/compute_generator.py", line 117, in invoke_compute_fn
+    return fn(context, **args_to_pass) if context_arg_provided else fn(**args_to_pass)
+  File "/opt/dagster/app/dagster_defs/__init__.py", line 130, in extract_data_op
+    df = fetch_data_from_api(start_date, end_date, columns=["wind_speed", "power"])
+  File "/opt/dagster/app/etl/transform.py", line 43, in fetch_data_from_api
+    response = client.get(url, params=params)
+  File "/usr/local/lib/python3.9/site-packages/httpx/_client.py", line 1053, in get
+    return self.request(
+  File "/usr/local/lib/python3.9/site-packages/httpx/_client.py", line 825, in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+  File "/usr/local/lib/python3.9/site-packages/httpx/_client.py", line 914, in send
+    response = self._send_handling_auth(
+  File "/usr/local/lib/python3.9/site-packages/httpx/_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+  File "/usr/local/lib/python3.9/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "/usr/local/lib/python3.9/site-packages/httpx/_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+  File "/usr/local/lib/python3.9/site-packages/httpx/_transports/default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+  File "/usr/local/lib/python3.9/contextlib.py", line 137, in __exit__
+    self.gen.throw(typ, value, traceback)
+  File "/usr/local/lib/python3.9/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+
+The above exception was caused by the following exception:
+httpcore.ConnectError: [Errno -2] Name or service not known
+
+Stack Trace:
+  File "/usr/local/lib/python3.9/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/usr/local/lib/python3.9/site-packages/httpx/_transports/default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+  File "/usr/local/lib/python3.9/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "/usr/local/lib/python3.9/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+  File "/usr/local/lib/python3.9/site-packages/httpcore/_sync/connection.py", line 101, in handle_request
+    raise exc
+  File "/usr/local/lib/python3.9/site-packages/httpcore/_sync/connection.py", line 78, in handle_request
+    stream = self._connect(request)
+  File "/usr/local/lib/python3.9/site-packages/httpcore/_sync/connection.py", line 124, in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+  File "/usr/local/lib/python3.9/site-packages/httpcore/_backends/sync.py", line 215, in connect_tcp
+    sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+  File "/usr/local/lib/python3.9/contextlib.py", line 137, in __exit__
+    self.gen.throw(typ, value, traceback)
+  File "/usr/local/lib/python3.9/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+

@@ -1,0 +1,132 @@
+services:
+  source_db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: source
+    ports:
+      - "5432:5432"
+    volumes:
+      - source_db_data:/var/lib/postgresql/data
+    networks:
+      - etl_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  target_db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: target
+    ports:
+      - "5433:5432"
+    volumes:
+      - target_db_data:/var/lib/postgresql/data
+    networks:
+      - etl_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  db_init:
+    build:
+      context: ./db_init
+    environment:
+      SOURCE_DB_URI: postgresql://postgres:postgres@source_db:5432/source
+      TARGET_DB_URI: postgresql://postgres:postgres@target_db:5432/target
+    depends_on:
+      source_db:
+        condition: service_healthy
+      target_db:
+        condition: service_healthy
+    networks:
+      - etl_network
+
+  api:
+    build:
+      context: .
+    command: python main.py
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@target_db:5432/target
+    depends_on:
+      db_init:
+        condition: service_completed_successfully
+    networks:
+      - etl_network
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail http://localhost:8000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  etl:
+    build:
+      context: ./etl
+    environment:
+      SOURCE_API_URL: http://api:8000
+      TARGET_DB_URI: postgresql://postgres:postgres@target_db:5432/target
+    depends_on:
+      - api
+      - target_db
+    networks:
+      - etl_network
+
+  # Dagster services for orchestration
+  dagster-dagit:
+    build:
+      context: .
+      dockerfile: dagster.Dockerfile
+    working_dir: /opt/dagster/app
+    command: dagit -h 0.0.0.0 -p 3000
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/opt/dagster/app
+    environment:
+      DAGSTER_HOME: /opt/dagster/app/dagster_home
+      SOURCE_API_URL: http://api:8000
+      TARGET_DB_URI: postgresql://postgres:postgres@target_db:5432/target
+    depends_on:
+      - api
+      - target_db
+      - etl
+    networks:
+      - etl_network
+
+  dagster-daemon:
+    build:
+      context: .
+      dockerfile: dagster.Dockerfile
+    working_dir: /opt/dagster/app
+    command: dagster-daemon run
+    volumes:
+      - .:/opt/dagster/app
+    environment:
+      DAGSTER_HOME: /opt/dagster/app/dagster_home
+      SOURCE_API_URL: http://api:8000
+      TARGET_DB_URI: postgresql://postgres:postgres@target_db:5432/target
+    depends_on:
+      - api
+      - target_db
+      - etl
+    networks:
+      - etl_network
+
+volumes:
+  source_db_data:
+  target_db_data:
+  dagster_home:
+
+networks:
+  etl_network:
+    name: etl_network
+    driver: bridge

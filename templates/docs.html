@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETL Wind Power - Documentação</title>
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <style>
+        body {
+            padding-top: 20px;
+            padding-bottom: 50px;
+        }
+        .code-block {
+            background-color: var(--bs-dark);
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-family: monospace;
+            white-space: pre;
+            overflow-x: auto;
+        }
+        .api-endpoint {
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--bs-border-color);
+            padding-bottom: 20px;
+        }
+        .method {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-right: 10px;
+        }
+        .method-get {
+            background-color: var(--bs-info);
+            color: var(--bs-dark);
+        }
+        .method-post {
+            background-color: var(--bs-success);
+            color: var(--bs-dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="mb-5">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="/">ETL Wind Power</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="/docs">Documentação</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        
+        <section>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="list-group sticky-top pt-3">
+                        <a href="#overview" class="list-group-item list-group-item-action">Visão Geral</a>
+                        <a href="#architecture" class="list-group-item list-group-item-action">Arquitetura</a>
+                        <a href="#etl-process" class="list-group-item list-group-item-action">Processo ETL</a>
+                        <a href="#api-endpoints" class="list-group-item list-group-item-action">Endpoints da API</a>
+                        <a href="#data-models" class="list-group-item list-group-item-action">Modelos de Dados</a>
+                        <a href="#dagster" class="list-group-item list-group-item-action">Orquestração com Dagster</a>
+                        <a href="#running" class="list-group-item list-group-item-action">Executando o Sistema</a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-9">
+                    <section id="overview" class="mb-5">
+                        <h2>Visão Geral</h2>
+                        <p class="lead">
+                            ETL Wind Power é uma solução completa para processamento de dados de energia eólica utilizando 
+                            processos ETL (Extract, Transform, Load) com Python, PostgreSQL, e orquestração Dagster.
+                        </p>
+                        <p>
+                            O sistema coleta dados brutos de turbinas eólicas, transforma-os calculando agregações estatísticas 
+                            em janelas de tempo, e carrega os dados processados em um banco de dados de destino para análise e visualização.
+                        </p>
+                    </section>
+                    
+                    <section id="architecture" class="mb-5">
+                        <h2>Arquitetura</h2>
+                        <p>
+                            O sistema utiliza uma arquitetura de microserviços com os seguintes componentes:
+                        </p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-header bg-primary">Banco de Dados de Origem</div>
+                                    <div class="card-body">
+                                        <p>Armazena dados brutos das turbinas eólicas com frequência de 1 minuto.</p>
+                                        <ul>
+                                            <li>Velocidade do vento (m/s)</li>
+                                            <li>Potência gerada (kW)</li>
+                                            <li>Temperatura ambiente (°C)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-header bg-success">Banco de Dados de Destino</div>
+                                    <div class="card-body">
+                                        <p>Armazena dados transformados e agregados em janelas de 10 minutos.</p>
+                                        <ul>
+                                            <li>Estatísticas de velocidade do vento (média, mín, máx, desvio padrão)</li>
+                                            <li>Estatísticas de potência (média, mín, máx, desvio padrão)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card mb-3">
+                                    <div class="card-header bg-info text-dark">API</div>
+                                    <div class="card-body">
+                                        <p>Interface REST para acesso aos dados brutos e transformados.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card mb-3">
+                                    <div class="card-header bg-warning text-dark">ETL Pipeline</div>
+                                    <div class="card-body">
+                                        <p>Processos de extração, transformação e carregamento de dados.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card mb-3">
+                                    <div class="card-header bg-danger">Dagster</div>
+                                    <div class="card-body">
+                                        <p>Orquestração de workflows e agendamento de jobs.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <section id="etl-process" class="mb-5">
+                        <h2>Processo ETL</h2>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card mb-3">
+                                    <div class="card-header bg-primary">Extract (Extração)</div>
+                                    <div class="card-body">
+                                        <p>Extração de dados brutos do banco de origem, filtrados por data.</p>
+                                        <p>A API fornece dados em formato JSON que são convertidos para DataFrames pandas.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card mb-3">
+                                    <div class="card-header bg-primary">Transform (Transformação)</div>
+                                    <div class="card-body">
+                                        <p>Agregação de dados em janelas de 10 minutos.</p>
+                                        <p>Cálculo de estatísticas: média, mínimo, máximo e desvio padrão.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card mb-3">
+                                    <div class="card-header bg-primary">Load (Carregamento)</div>
+                                    <div class="card-body">
+                                        <p>Armazenamento dos dados transformados no banco de destino.</p>
+                                        <p>Cada tipo de estatística é armazenado como um sinal distinto com metadados.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <section id="api-endpoints" class="mb-5">
+                        <h2>Endpoints da API</h2>
+                        
+                        <div class="api-endpoint">
+                            <h4>
+                                <span class="method method-get">GET</span>
+                                <code>/api/data</code>
+                            </h4>
+                            <p>Retorna dados brutos do banco de origem com filtros de data.</p>
+                            <h5>Parâmetros de Query</h5>
+                            <ul>
+                                <li><code>start_date</code> - Data inicial (formato ISO)</li>
+                                <li><code>end_date</code> - Data final (formato ISO)</li>
+                                <li><code>columns</code> - Colunas a retornar (separadas por vírgula)</li>
+                            </ul>
+                            <h5>Exemplo de Resposta</h5>
+                            <div class="code-block">
+{
+  "data": [
+    {
+      "id": 1,
+      "timestamp": "2025-04-25T12:00:00",
+      "wind_speed": 10.5,
+      "power": 750.2,
+      "ambient_temperature": 22.3
+    },
+    ...
+  ],
+  "count": 1440,
+  "start_date": "2025-04-25T00:00:00",
+  "end_date": "2025-04-25T23:59:59"
+}</div>
+                        </div>
+                        
+                        <div class="api-endpoint">
+                            <h4>
+                                <span class="method method-get">GET</span>
+                                <code>/api/signals</code>
+                            </h4>
+                            <p>Retorna dados transformados do banco de destino.</p>
+                            <h5>Parâmetros de Query</h5>
+                            <ul>
+                                <li><code>start_date</code> - Data inicial (formato ISO)</li>
+                                <li><code>end_date</code> - Data final (formato ISO)</li>
+                                <li><code>signal_type</code> - Tipo de sinal a retornar</li>
+                            </ul>
+                            <h5>Exemplo de Resposta</h5>
+                            <div class="code-block">
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "wind_speed_mean",
+      "timestamp": "2025-04-25T12:00:00",
+      "value": 9.8,
+      "signal_type": "wind_speed_avg",
+      "data": {
+        "wind_speed_mean": 9.8,
+        "wind_speed_min": 8.2,
+        "wind_speed_max": 11.5,
+        "wind_speed_std": 0.8,
+        "power_mean": 720.5,
+        "power_min": 650.1,
+        "power_max": 810.3,
+        "power_std": 45.2
+      }
+    },
+    ...
+  ],
+  "count": 144,
+  "start_date": "2025-04-25T00:00:00",
+  "end_date": "2025-04-25T23:59:59"
+}</div>
+                        </div>
+                        
+                        <div class="api-endpoint">
+                            <h4>
+                                <span class="method method-post">POST</span>
+                                <code>/api/run-etl</code>
+                            </h4>
+                            <p>Executa manualmente o processo ETL para um número específico de dias.</p>
+                            <h5>Corpo da Requisição (JSON)</h5>
+                            <div class="code-block">
+{
+  "days": 3
+}</div>
+                            <h5>Exemplo de Resposta</h5>
+                            <div class="code-block">
+{
+  "status": "success",
+  "message": "ETL process completed successfully",
+  "records_processed": 3456,
+  "days_processed": 3,
+  "timestamp": "2025-05-01T01:45:23.123456"
+}</div>
+                        </div>
+                        
+                        <div class="api-endpoint">
+                            <h4>
+                                <span class="method method-post">POST</span>
+                                <code>/api/generate-data</code>
+                            </h4>
+                            <p>Gera novos dados aleatórios para o banco de origem.</p>
+                            <h5>Corpo da Requisição (JSON)</h5>
+                            <div class="code-block">
+{
+  "days": 5,
+  "frequency": "1min"
+}</div>
+                            <h5>Exemplo de Resposta</h5>
+                            <div class="code-block">
+{
+  "status": "success",
+  "message": "Generated 7200 data points with 1min frequency",
+  "record_count": 7200,
+  "days": 5,
+  "frequency": "1min",
+  "timestamp": "2025-05-01T01:46:12.345678"
+}</div>
+                        </div>
+                    </section>
+                    
+                    <section id="data-models" class="mb-5">
+                        <h2>Modelos de Dados</h2>
+                        
+                        <h4>Banco de Dados de Origem</h4>
+                        <div class="code-block">
+class Data(db.Model):
+    """
+    Modelo para os dados brutos no banco de origem
+    """
+    __tablename__ = "data"
+    
+    id = db.Column(db.Integer, primary_key=True, index=True)
+    timestamp = db.Column(db.DateTime, nullable=False, index=True)
+    wind_speed = db.Column(db.Float, nullable=False)
+    power = db.Column(db.Float, nullable=False)
+    ambient_temperature = db.Column(db.Float, nullable=False)</div>
+                        
+                        <h4>Banco de Dados de Destino</h4>
+                        <div class="code-block">
+class SignalType(db.Model):
+    """
+    Modelo para tipos de sinais no banco de destino
+    """
+    __tablename__ = "signal_type"
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False, unique=True)
+    
+    signals = db.relationship("Signal", back_populates="signal_type")
+    
+class Signal(db.Model):
+    """
+    Modelo para a tabela de sinais no banco de destino
+    """
+    __tablename__ = "signal"
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    data = db.Column(JSON, nullable=True)
+    timestamp = db.Column(db.DateTime, nullable=False)
+    signal_id = db.Column(db.Integer, db.ForeignKey("signal_type.id"), nullable=False)
+    value = db.Column(db.Float, nullable=False)
+    
+    signal_type = db.relationship("SignalType", back_populates="signals")</div>
+                    </section>
+                    
+                    <section id="dagster" class="mb-5">
+                        <h2>Orquestração com Dagster</h2>
+                        <p>
+                            O sistema utiliza Dagster para orquestração de workflows, permitindo a execução automática 
+                            dos processos ETL com agendamento, particionamento de dados e monitoramento.
+                        </p>
+                        
+                        <h4>Particionamento Diário</h4>
+                        <p>
+                            Os dados são processados em partições diárias, permitindo reprocessamento 
+                            seletivo e facilitando a gestão de falhas.
+                        </p>
+                        
+                        <h4>Assets Dagster</h4>
+                        <div class="code-block">
+@asset(partitions_def=daily_partitions)
+def raw_wind_power_data(context):
+    """Extract data from the source API for the partitioned date"""
+    # Extração de dados brutos
+    
+@asset(partitions_def=daily_partitions)
+def aggregated_wind_power_data(context, raw_data):
+    """Transform the raw data with 10-minute aggregations"""
+    # Transformação de dados
+    
+@asset(partitions_def=daily_partitions)
+def wind_power_signals(context, aggregated_data):
+    """Load the transformed data into the target database"""
+    # Carregamento de dados</div>
+                        
+                        <h4>Agendamento</h4>
+                        <p>
+                            O pipeline ETL é executado automaticamente todos os dias, processando os dados do dia anterior.
+                        </p>
+                        <div class="code-block">
+# Define a schedule that runs the job every day at 2 AM
+etl_schedule = ScheduleDefinition(
+    name="daily_etl_schedule",
+    job=etl_job,
+    cron_schedule="0 2 * * *",  # Run at 2 AM every day
+    description="Schedule for running the ETL job daily"
+)</div>
+                    </section>
+                    
+                    <section id="running" class="mb-5">
+                        <h2>Executando o Sistema</h2>
+                        <p>
+                            O sistema pode ser executado em diferentes ambientes:
+                        </p>
+                        
+                        <h4>Ambiente Replit</h4>
+                        <p>
+                            No ambiente Replit, o sistema é executado através de dois workflows principais:
+                        </p>
+                        <ul>
+                            <li><strong>Start application</strong>: Inicia o servidor web Flask com Gunicorn</li>
+                            <li><strong>ETL Pipeline</strong>: Executa o processo ETL usando Python</li>
+                        </ul>
+                        <p>
+                            Para iniciar o processo ETL manualmente, você pode executar:
+                        </p>
+                        <div class="code-block">python run_etl.py</div>
+                        
+                        <h4>Ambiente Docker (Opcional)</h4>
+                        <p>
+                            Em ambientes com suporte a Docker, o sistema pode ser executado como containers separados:
+                        </p>
+                        <div class="code-block">docker-compose up -d</div>
+                        <p>
+                            Isso iniciará todos os serviços necessários:
+                        </p>
+                        <ul>
+                            <li>PostgreSQL para os bancos de origem e destino</li>
+                            <li>API para acesso aos dados</li>
+                            <li>Serviço ETL para processamento</li>
+                            <li>Dagster para orquestração</li>
+                        </ul>
+                    </section>
+                </div>
+            </div>
+        </section>
+        
+        <footer class="mt-5 pt-4 border-top text-center text-muted">
+            <p>&copy; 2025 ETL Wind Power - Sistema de Análise de Dados Eólicos</p>
+        </footer>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

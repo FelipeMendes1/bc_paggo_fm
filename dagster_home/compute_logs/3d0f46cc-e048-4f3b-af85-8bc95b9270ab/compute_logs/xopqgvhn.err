@@ -1,0 +1,16 @@
+2025-05-01 18:30:54 +0000 - dagster - DEBUG - etl_daily_job - 3d0f46cc-e048-4f3b-af85-8bc95b9270ab - 28903 - LOGS_CAPTURED - Started capturing logs in process (pid: 28903).
+2025-05-01 18:30:54 +0000 - dagster - DEBUG - etl_daily_job - 3d0f46cc-e048-4f3b-af85-8bc95b9270ab - 28903 - wind_power_signals - STEP_START - Started execution of step "wind_power_signals".
+INFO:alembic.runtime.migration:Context impl SQLiteImpl.
+INFO:alembic.runtime.migration:Will assume non-transactional DDL.
+2025-05-01 18:30:55 +0000 - dagster - DEBUG - etl_daily_job - 3d0f46cc-e048-4f3b-af85-8bc95b9270ab - wind_power_signals - Loading 1 partitions...
+2025-05-01 18:30:55 +0000 - dagster - DEBUG - etl_daily_job - 3d0f46cc-e048-4f3b-af85-8bc95b9270ab - wind_power_signals - Loading partition 2025-04-27 from /opt/dagster/app/dagster_home/storage/storage/aggregated_wind_power_data/2025-04-27 using PickledObjectFilesystemIOManager...
+2025-05-01 18:30:55 +0000 - dagster - DEBUG - etl_daily_job - 3d0f46cc-e048-4f3b-af85-8bc95b9270ab - 28903 - wind_power_signals - LOADED_INPUT - Loaded input "aggregated_data" using input manager "io_manager", from output "result" of step "aggregated_wind_power_data"
+2025-05-01 18:30:56 +0000 - dagster - DEBUG - etl_daily_job - 3d0f46cc-e048-4f3b-af85-8bc95b9270ab - 28903 - wind_power_signals - STEP_INPUT - Got input "aggregated_data" of type "Any". (Type check passed).
+INFO:etl.database:Target database tables created or already exist
+INFO:etl.transform:Successfully saved 1152 records to target database
+2025-05-01 18:30:56 +0000 - dagster - INFO - etl_daily_job - 3d0f46cc-e048-4f3b-af85-8bc95b9270ab - wind_power_signals - Loaded 1152 signals into target database
+2025-05-01 18:30:56 +0000 - dagster - DEBUG - etl_daily_job - 3d0f46cc-e048-4f3b-af85-8bc95b9270ab - 28903 - wind_power_signals - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
+2025-05-01 18:30:57 +0000 - dagster - DEBUG - etl_daily_job - 3d0f46cc-e048-4f3b-af85-8bc95b9270ab - wind_power_signals - Writing file at: /opt/dagster/app/dagster_home/storage/storage/wind_power_signals/2025-04-27 using PickledObjectFilesystemIOManager...
+2025-05-01 18:30:57 +0000 - dagster - DEBUG - etl_daily_job - 3d0f46cc-e048-4f3b-af85-8bc95b9270ab - 28903 - wind_power_signals - ASSET_MATERIALIZATION - Materialized value wind_power_signals.
+2025-05-01 18:30:57 +0000 - dagster - DEBUG - etl_daily_job - 3d0f46cc-e048-4f3b-af85-8bc95b9270ab - 28903 - wind_power_signals - HANDLED_OUTPUT - Handled output "result" using IO manager "io_manager"
+2025-05-01 18:30:58 +0000 - dagster - DEBUG - etl_daily_job - 3d0f46cc-e048-4f3b-af85-8bc95b9270ab - 28903 - wind_power_signals - STEP_SUCCESS - Finished execution of step "wind_power_signals" in 3.65s.

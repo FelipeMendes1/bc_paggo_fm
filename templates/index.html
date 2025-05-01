@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wind Power ETL Dashboard</title>
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <div class="col">
+                <h1 class="mb-3">Wind Power ETL Dashboard</h1>
+                <p class="lead">This dashboard displays data from the ETL (Extract, Transform, Load) pipeline processing wind power data.</p>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title">Source Data</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Raw data from wind turbines collected at 1-minute intervals.</p>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div>Wind Speed</div>
+                                <span class="badge bg-primary rounded-pill" id="wind-speed-count">-</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div>Power Output</div>
+                                <span class="badge bg-primary rounded-pill" id="power-count">-</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div>Temperature</div>
+                                <span class="badge bg-primary rounded-pill" id="temp-count">-</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <div class="input-group">
+                            <span class="input-group-text">Date Range</span>
+                            <input type="date" class="form-control" id="source-start-date">
+                            <input type="date" class="form-control" id="source-end-date">
+                            <button class="btn btn-outline-secondary" type="button" id="source-refresh">Refresh</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title">Transformed Data</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Processed data with 10-minute aggregation windows.</p>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div>Wind Speed Signals</div>
+                                <span class="badge bg-info rounded-pill" id="wind-signal-count">-</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div>Power Signals</div>
+                                <span class="badge bg-info rounded-pill" id="power-signal-count">-</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <div class="input-group">
+                            <span class="input-group-text">Signal Type</span>
+                            <select class="form-select" id="signal-type">
+                                <option value="">All Signals</option>
+                                <option value="wind_speed_avg">Wind Speed Avg</option>
+                                <option value="wind_speed_max">Wind Speed Max</option>
+                                <option value="power_avg">Power Avg</option>
+                                <option value="power_max">Power Max</option>
+                            </select>
+                            <button class="btn btn-outline-secondary" type="button" id="signal-refresh">Refresh</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Time Series Data</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="timeSeriesChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">ETL Pipeline</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6>Pipeline Components</h6>
+                        <ul class="list-group list-group-flush mb-3">
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div>Source API</div>
+                                <span class="badge bg-success rounded-pill" id="api-status">Active</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div>Source Database</div>
+                                <span class="badge bg-success rounded-pill" id="source-db-status">Connected</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div>ETL Transform</div>
+                                <span class="badge bg-success rounded-pill" id="etl-status">Active</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div>Target Database</div>
+                                <span class="badge bg-success rounded-pill" id="target-db-status">Connected</span>
+                            </li>
+                        </ul>
+                        
+                        <button type="button" class="btn btn-primary" id="trigger-etl">Run ETL Process</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Data Generator</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Generate new sample data for the source database.</p>
+                        <div class="mb-3">
+                            <label for="data-days" class="form-label">Number of Days</label>
+                            <input type="number" class="form-control" id="data-days" value="3" min="1" max="30">
+                        </div>
+                        <div class="mb-3">
+                            <label for="data-frequency" class="form-label">Data Frequency</label>
+                            <select class="form-select" id="data-frequency">
+                                <option value="1min">1 Minute</option>
+                                <option value="5min">5 Minutes</option>
+                                <option value="10min">10 Minutes</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-warning" id="generate-data">Generate Data</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize date inputs with default values
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default date range to last 24 hours
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            
+            document.getElementById('source-end-date').valueAsDate = today;
+            document.getElementById('source-start-date').valueAsDate = yesterday;
+            
+            // Fetch initial data
+            fetchSourceData();
+            fetchSignalData();
+            loadTimeSeriesChart();
+            
+            // Add event listeners for refresh buttons
+            document.getElementById('source-refresh').addEventListener('click', fetchSourceData);
+            document.getElementById('signal-refresh').addEventListener('click', fetchSignalData);
+            
+            // Add event listener for ETL trigger button
+            document.getElementById('trigger-etl').addEventListener('click', triggerETL);
+            
+            // Add event listener for data generation button
+            document.getElementById('generate-data').addEventListener('click', generateData);
+        });
+        
+        // Chart object for time series data
+        let timeSeriesChart = null;
+        
+        // Fetch source data from API
+        function fetchSourceData() {
+            const startDate = document.getElementById('source-start-date').value;
+            const endDate = document.getElementById('source-end-date').value;
+            
+            fetch(`/api/data?start_date=${startDate}T00:00:00&end_date=${endDate}T23:59:59`)
+                .then(response => response.json())
+                .then(data => {
+                    // Update UI with data counts
+                    document.getElementById('wind-speed-count').textContent = data.count;
+                    document.getElementById('power-count').textContent = data.count;
+                    document.getElementById('temp-count').textContent = data.count;
+                    
+                    // Update chart
+                    loadTimeSeriesChart();
+                })
+                .catch(error => {
+                    console.error('Error fetching source data:', error);
+                    // Show error notification
+                    alert('Error fetching source data. See console for details.');
+                });
+        }
+        
+        // Fetch transformed signal data from API
+        function fetchSignalData() {
+            const signalType = document.getElementById('signal-type').value;
+            const startDate = document.getElementById('source-start-date').value;
+            const endDate = document.getElementById('source-end-date').value;
+            
+            let url = `/api/signals?start_date=${startDate}T00:00:00&end_date=${endDate}T23:59:59`;
+            if (signalType) {
+                url += `&signal_type=${signalType}`;
+            }
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // Count wind speed and power signals
+                    let windSignals = 0;
+                    let powerSignals = 0;
+                    
+                    if (data.data) {
+                        data.data.forEach(signal => {
+                            if (signal.signal_type.startsWith('wind_speed_')) {
+                                windSignals++;
+                            } else if (signal.signal_type.startsWith('power_')) {
+                                powerSignals++;
+                            }
+                        });
+                    }
+                    
+                    // Update UI with signal counts
+                    document.getElementById('wind-signal-count').textContent = windSignals;
+                    document.getElementById('power-signal-count').textContent = powerSignals;
+                })
+                .catch(error => {
+                    console.error('Error fetching signal data:', error);
+                    // Show error notification
+                    alert('Error fetching signal data. See console for details.');
+                });
+        }
+        
+        // Load time series chart with data
+        function loadTimeSeriesChart() {
+            const startDate = document.getElementById('source-start-date').value;
+            const endDate = document.getElementById('source-end-date').value;
+            
+            fetch(`/api/data?start_date=${startDate}T00:00:00&end_date=${endDate}T23:59:59`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.data || data.data.length === 0) {
+                        console.log('No data available for chart');
+                        return;
+                    }
+                    
+                    // Prepare data for chart
+                    const timestamps = data.data.map(item => new Date(item.timestamp));
+                    const windSpeed = data.data.map(item => item.wind_speed);
+                    const power = data.data.map(item => item.power / 100); // Scale down for better visualization
+                    
+                    // Create or update chart
+                    if (timeSeriesChart) {
+                        // Update existing chart
+                        timeSeriesChart.data.labels = timestamps;
+                        timeSeriesChart.data.datasets[0].data = windSpeed;
+                        timeSeriesChart.data.datasets[1].data = power;
+                        timeSeriesChart.update();
+                    } else {
+                        // Create new chart
+                        const ctx = document.getElementById('timeSeriesChart').getContext('2d');
+                        timeSeriesChart = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: timestamps,
+                                datasets: [
+                                    {
+                                        label: 'Wind Speed (m/s)',
+                                        data: windSpeed,
+                                        borderColor: 'rgba(54, 162, 235, 1)',
+                                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                        borderWidth: 1,
+                                        tension: 0.1
+                                    },
+                                    {
+                                        label: 'Power (scaled kW)',
+                                        data: power,
+                                        borderColor: 'rgba(255, 99, 132, 1)',
+                                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                        borderWidth: 1,
+                                        tension: 0.1
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    x: {
+                                        type: 'time',
+                                        time: {
+                                            unit: 'hour'
+                                        },
+                                        title: {
+                                            display: true,
+                                            text: 'Time'
+                                        }
+                                    },
+                                    y: {
+                                        beginAtZero: true,
+                                        title: {
+                                            display: true,
+                                            text: 'Value'
+                                        }
+                                    }
+                                },
+                                plugins: {
+                                    tooltip: {
+                                        mode: 'index',
+                                        intersect: false
+                                    }
+                                }
+                            }
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading chart data:', error);
+                });
+        }
+        
+        // Trigger ETL process manually
+        function triggerETL() {
+            // Update UI to show ETL is running
+            document.getElementById('etl-status').textContent = 'Running';
+            document.getElementById('etl-status').classList.remove('bg-success');
+            document.getElementById('etl-status').classList.add('bg-warning');
+            
+            // Disable button while ETL is running
+            const etlButton = document.getElementById('trigger-etl');
+            etlButton.disabled = true;
+            
+            // Call the ETL process API endpoint
+            fetch('/api/run-etl', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    days: 3  // Process last 3 days
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update UI to show ETL completed
+                document.getElementById('etl-status').textContent = 'Active';
+                document.getElementById('etl-status').classList.remove('bg-warning');
+                document.getElementById('etl-status').classList.add('bg-success');
+                
+                // Re-enable button
+                etlButton.disabled = false;
+                
+                // Refresh signal data to show new results
+                fetchSignalData();
+                
+                // Show success message
+                alert(`ETL process completed: ${data.records_processed} records processed!`);
+            })
+            .catch(error => {
+                console.error('Error running ETL process:', error);
+                
+                // Update UI to show error
+                document.getElementById('etl-status').textContent = 'Error';
+                document.getElementById('etl-status').classList.remove('bg-warning');
+                document.getElementById('etl-status').classList.add('bg-danger');
+                
+                // Re-enable button
+                etlButton.disabled = false;
+                
+                // Show error message
+                alert('Error running ETL process. See console for details.');
+            });
+        }
+        
+        // Generate new data for source database
+        function generateData() {
+            // Get parameters
+            const days = document.getElementById('data-days').value;
+            const frequency = document.getElementById('data-frequency').value;
+            
+            // Update UI to show generation is in progress
+            document.getElementById('source-db-status').textContent = 'Generating';
+            document.getElementById('source-db-status').classList.remove('bg-success');
+            document.getElementById('source-db-status').classList.add('bg-warning');
+            
+            // Disable button while generation is in progress
+            const generateButton = document.getElementById('generate-data');
+            generateButton.disabled = true;
+            
+            // Call the data generation API endpoint
+            fetch('/api/generate-data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    days: parseInt(days),
+                    frequency: frequency
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update UI to show generation completed
+                document.getElementById('source-db-status').textContent = 'Connected';
+                document.getElementById('source-db-status').classList.remove('bg-warning');
+                document.getElementById('source-db-status').classList.add('bg-success');
+                
+                // Re-enable button
+                generateButton.disabled = false;
+                
+                // Refresh source data to show new results
+                fetchSourceData();
+                
+                // Show success message
+                alert(`Generated ${data.record_count} data points with ${data.frequency} frequency!`);
+            })
+            .catch(error => {
+                console.error('Error generating data:', error);
+                
+                // Update UI to show error
+                document.getElementById('source-db-status').textContent = 'Error';
+                document.getElementById('source-db-status').classList.remove('bg-warning');
+                document.getElementById('source-db-status').classList.add('bg-danger');
+                
+                // Re-enable button
+                generateButton.disabled = false;
+                
+                // Show error message
+                alert('Error generating data. See console for details.');
+            });
+        }
+    </script>
+</body>
+</html>

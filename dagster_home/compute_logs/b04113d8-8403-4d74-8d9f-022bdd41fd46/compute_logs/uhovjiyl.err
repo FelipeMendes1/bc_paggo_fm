@@ -1,0 +1,29 @@
+2025-05-01 15:17:53 +0000 - dagster - DEBUG - etl_pipeline_job - b04113d8-8403-4d74-8d9f-022bdd41fd46 - 1966 - LOGS_CAPTURED - Started capturing logs in process (pid: 1966).
+2025-05-01 15:17:53 +0000 - dagster - DEBUG - etl_pipeline_job - b04113d8-8403-4d74-8d9f-022bdd41fd46 - 1966 - extract_data_op - STEP_START - Started execution of step "extract_data_op".
+2025-05-01 15:17:53 +0000 - dagster - DEBUG - etl_pipeline_job - b04113d8-8403-4d74-8d9f-022bdd41fd46 - extract_data_op - Loading file from: /opt/dagster/app/dagster_home/storage/storage/b04113d8-8403-4d74-8d9f-022bdd41fd46/get_start_datetime/result using PickledObjectFilesystemIOManager...
+2025-05-01 15:17:53 +0000 - dagster - DEBUG - etl_pipeline_job - b04113d8-8403-4d74-8d9f-022bdd41fd46 - 1966 - extract_data_op - LOADED_INPUT - Loaded input "start_date" using input manager "io_manager", from output "result" of step "get_start_datetime"
+2025-05-01 15:17:53 +0000 - dagster - DEBUG - etl_pipeline_job - b04113d8-8403-4d74-8d9f-022bdd41fd46 - extract_data_op - Loading file from: /opt/dagster/app/dagster_home/storage/storage/b04113d8-8403-4d74-8d9f-022bdd41fd46/get_end_datetime/result using PickledObjectFilesystemIOManager...
+2025-05-01 15:17:53 +0000 - dagster - DEBUG - etl_pipeline_job - b04113d8-8403-4d74-8d9f-022bdd41fd46 - 1966 - extract_data_op - LOADED_INPUT - Loaded input "end_date" using input manager "io_manager", from output "result" of step "get_end_datetime"
+2025-05-01 15:17:54 +0000 - dagster - DEBUG - etl_pipeline_job - b04113d8-8403-4d74-8d9f-022bdd41fd46 - 1966 - extract_data_op - STEP_INPUT - Got input "start_date" of type "Any". (Type check passed).
+2025-05-01 15:17:54 +0000 - dagster - DEBUG - etl_pipeline_job - b04113d8-8403-4d74-8d9f-022bdd41fd46 - 1966 - extract_data_op - STEP_INPUT - Got input "end_date" of type "Any". (Type check passed).
+INFO:etl.transform:Fetching data from http://api:8000/data with params: {'start_date': '2025-04-30T00:00:00', 'end_date': '2025-04-30T23:59:59.999999', 'columns': 'wind_speed,power'}
+DEBUG:httpcore.connection:connect_tcp.started host='api' port=8000 local_address=None timeout=60.0 socket_options=None
+DEBUG:httpcore.connection:connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x7fc061cfa550>
+DEBUG:httpcore.http11:send_request_headers.started request=<Request [b'GET']>
+DEBUG:httpcore.http11:send_request_headers.complete
+DEBUG:httpcore.http11:send_request_body.started request=<Request [b'GET']>
+DEBUG:httpcore.http11:send_request_body.complete
+DEBUG:httpcore.http11:receive_response_headers.started request=<Request [b'GET']>
+DEBUG:httpcore.http11:receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'date', b'Thu, 01 May 2025 15:17:53 GMT'), (b'server', b'uvicorn'), (b'content-length', b'139856'), (b'content-type', b'application/json')])
+INFO:httpx:HTTP Request: GET http://api:8000/data?start_date=2025-04-30T00%3A00%3A00&end_date=2025-04-30T23%3A59%3A59.999999&columns=wind_speed%2Cpower "HTTP/1.1 200 OK"
+DEBUG:httpcore.http11:receive_response_body.started request=<Request [b'GET']>
+DEBUG:httpcore.http11:receive_response_body.complete
+DEBUG:httpcore.http11:response_closed.started
+DEBUG:httpcore.http11:response_closed.complete
+INFO:etl.transform:Successfully fetched 1440 records from API
+DEBUG:httpcore.connection:close.started
+DEBUG:httpcore.connection:close.complete
+2025-05-01 15:17:54 +0000 - dagster - DEBUG - etl_pipeline_job - b04113d8-8403-4d74-8d9f-022bdd41fd46 - 1966 - extract_data_op - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
+2025-05-01 15:17:54 +0000 - dagster - DEBUG - etl_pipeline_job - b04113d8-8403-4d74-8d9f-022bdd41fd46 - extract_data_op - Writing file at: /opt/dagster/app/dagster_home/storage/storage/b04113d8-8403-4d74-8d9f-022bdd41fd46/extract_data_op/result using PickledObjectFilesystemIOManager...
+2025-05-01 15:17:54 +0000 - dagster - DEBUG - etl_pipeline_job - b04113d8-8403-4d74-8d9f-022bdd41fd46 - 1966 - extract_data_op - HANDLED_OUTPUT - Handled output "result" using IO manager "io_manager"
+2025-05-01 15:17:54 +0000 - dagster - DEBUG - etl_pipeline_job - b04113d8-8403-4d74-8d9f-022bdd41fd46 - 1966 - extract_data_op - STEP_SUCCESS - Finished execution of step "extract_data_op" in 1.24s.

@@ -1,0 +1,14 @@
+2025-05-01 18:26:57 +0000 - dagster - DEBUG - etl_daily_job - d6717881-7a4f-41c1-be8b-a01eaf6de835 - 24701 - LOGS_CAPTURED - Started capturing logs in process (pid: 24701).
+2025-05-01 18:26:57 +0000 - dagster - DEBUG - etl_daily_job - d6717881-7a4f-41c1-be8b-a01eaf6de835 - 24701 - aggregated_wind_power_data - STEP_START - Started execution of step "aggregated_wind_power_data".
+INFO:alembic.runtime.migration:Context impl SQLiteImpl.
+INFO:alembic.runtime.migration:Will assume non-transactional DDL.
+2025-05-01 18:26:58 +0000 - dagster - DEBUG - etl_daily_job - d6717881-7a4f-41c1-be8b-a01eaf6de835 - aggregated_wind_power_data - Loading 1 partitions...
+2025-05-01 18:26:58 +0000 - dagster - DEBUG - etl_daily_job - d6717881-7a4f-41c1-be8b-a01eaf6de835 - aggregated_wind_power_data - Loading partition 2025-04-12 from /opt/dagster/app/dagster_home/storage/storage/raw_wind_power_data/2025-04-12 using PickledObjectFilesystemIOManager...
+2025-05-01 18:26:58 +0000 - dagster - DEBUG - etl_daily_job - d6717881-7a4f-41c1-be8b-a01eaf6de835 - 24701 - aggregated_wind_power_data - LOADED_INPUT - Loaded input "raw_data" using input manager "io_manager", from output "result" of step "raw_wind_power_data"
+2025-05-01 18:26:59 +0000 - dagster - DEBUG - etl_daily_job - d6717881-7a4f-41c1-be8b-a01eaf6de835 - 24701 - aggregated_wind_power_data - STEP_INPUT - Got input "raw_data" of type "Any". (Type check passed).
+2025-05-01 18:26:59 +0000 - dagster - WARNING - etl_daily_job - d6717881-7a4f-41c1-be8b-a01eaf6de835 - aggregated_wind_power_data - No source data available to aggregate
+2025-05-01 18:26:59 +0000 - dagster - DEBUG - etl_daily_job - d6717881-7a4f-41c1-be8b-a01eaf6de835 - 24701 - aggregated_wind_power_data - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
+2025-05-01 18:26:59 +0000 - dagster - DEBUG - etl_daily_job - d6717881-7a4f-41c1-be8b-a01eaf6de835 - aggregated_wind_power_data - Writing file at: /opt/dagster/app/dagster_home/storage/storage/aggregated_wind_power_data/2025-04-12 using PickledObjectFilesystemIOManager...
+2025-05-01 18:26:59 +0000 - dagster - DEBUG - etl_daily_job - d6717881-7a4f-41c1-be8b-a01eaf6de835 - 24701 - aggregated_wind_power_data - ASSET_MATERIALIZATION - Materialized value aggregated_wind_power_data.
+2025-05-01 18:27:00 +0000 - dagster - DEBUG - etl_daily_job - d6717881-7a4f-41c1-be8b-a01eaf6de835 - 24701 - aggregated_wind_power_data - HANDLED_OUTPUT - Handled output "result" using IO manager "io_manager"
+2025-05-01 18:27:00 +0000 - dagster - DEBUG - etl_daily_job - d6717881-7a4f-41c1-be8b-a01eaf6de835 - 24701 - aggregated_wind_power_data - STEP_SUCCESS - Finished execution of step "aggregated_wind_power_data" in 2.25s.

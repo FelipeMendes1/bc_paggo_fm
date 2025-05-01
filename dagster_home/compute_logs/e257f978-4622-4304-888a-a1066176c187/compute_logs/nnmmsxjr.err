@@ -1,0 +1,27 @@
+2025-05-01 18:28:35 +0000 - dagster - DEBUG - etl_daily_job - e257f978-4622-4304-888a-a1066176c187 - 26511 - LOGS_CAPTURED - Started capturing logs in process (pid: 26511).
+2025-05-01 18:28:35 +0000 - dagster - DEBUG - etl_daily_job - e257f978-4622-4304-888a-a1066176c187 - 26511 - raw_wind_power_data - STEP_START - Started execution of step "raw_wind_power_data".
+INFO:etl.transform:Fetching data from http://api:8000/data with params: {'start_date': '2025-04-11T00:00:00', 'end_date': '2025-04-11T23:59:59.999999', 'columns': 'wind_speed,power'}
+DEBUG:httpcore.connection:connect_tcp.started host='api' port=8000 local_address=None timeout=60.0 socket_options=None
+DEBUG:httpcore.connection:connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x7fa6b74a9670>
+DEBUG:httpcore.http11:send_request_headers.started request=<Request [b'GET']>
+DEBUG:httpcore.http11:send_request_headers.complete
+DEBUG:httpcore.http11:send_request_body.started request=<Request [b'GET']>
+DEBUG:httpcore.http11:send_request_body.complete
+DEBUG:httpcore.http11:receive_response_headers.started request=<Request [b'GET']>
+DEBUG:httpcore.http11:receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'date', b'Thu, 01 May 2025 18:28:35 GMT'), (b'server', b'uvicorn'), (b'content-length', b'76'), (b'content-type', b'application/json')])
+INFO:httpx:HTTP Request: GET http://api:8000/data?start_date=2025-04-11T00%3A00%3A00&end_date=2025-04-11T23%3A59%3A59.999999&columns=wind_speed%2Cpower "HTTP/1.1 200 OK"
+DEBUG:httpcore.http11:receive_response_body.started request=<Request [b'GET']>
+DEBUG:httpcore.http11:receive_response_body.complete
+DEBUG:httpcore.http11:response_closed.started
+DEBUG:httpcore.http11:response_closed.complete
+WARNING:etl.transform:No data returned from API for date range: 2025-04-11 00:00:00 to 2025-04-11 23:59:59.999999
+DEBUG:httpcore.connection:close.started
+DEBUG:httpcore.connection:close.complete
+2025-05-01 18:28:35 +0000 - dagster - INFO - etl_daily_job - e257f978-4622-4304-888a-a1066176c187 - raw_wind_power_data - Fetched 0 records for date 2025-04-11
+2025-05-01 18:28:36 +0000 - dagster - DEBUG - etl_daily_job - e257f978-4622-4304-888a-a1066176c187 - 26511 - raw_wind_power_data - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
+2025-05-01 18:28:36 +0000 - dagster - DEBUG - etl_daily_job - e257f978-4622-4304-888a-a1066176c187 - raw_wind_power_data - Writing file at: /opt/dagster/app/dagster_home/storage/storage/raw_wind_power_data/2025-04-11 using PickledObjectFilesystemIOManager...
+INFO:alembic.runtime.migration:Context impl SQLiteImpl.
+INFO:alembic.runtime.migration:Will assume non-transactional DDL.
+2025-05-01 18:28:37 +0000 - dagster - DEBUG - etl_daily_job - e257f978-4622-4304-888a-a1066176c187 - 26511 - raw_wind_power_data - ASSET_MATERIALIZATION - Materialized value raw_wind_power_data.
+2025-05-01 18:28:37 +0000 - dagster - DEBUG - etl_daily_job - e257f978-4622-4304-888a-a1066176c187 - 26511 - raw_wind_power_data - HANDLED_OUTPUT - Handled output "result" using IO manager "io_manager"
+2025-05-01 18:28:37 +0000 - dagster - DEBUG - etl_daily_job - e257f978-4622-4304-888a-a1066176c187 - 26511 - raw_wind_power_data - STEP_SUCCESS - Finished execution of step "raw_wind_power_data" in 1.65s.
