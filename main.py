@@ -4,6 +4,8 @@ from flask import Flask, render_template, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
 from datetime import datetime, timedelta
+from flask import Flask, request, jsonify, render_template, current_app
+from extensions import db
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -13,14 +15,8 @@ logger = logging.getLogger(__name__)
 class Base(DeclarativeBase):
     pass
 
-# Initialize SQLAlchemy with the base class
-db = SQLAlchemy(model_class=Base)
-
-# Create the Flask application
-app = Flask(__name__, template_folder='templates')
-
-
 def create_app():
+    app = Flask(__name__, template_folder='templates')
     from models import SignalType
     from models import Data, Signal
 
@@ -50,6 +46,8 @@ def create_app():
             db.session.add_all(default_signal_types)
             db.session.commit()
             logger.info("Default signal types initialized")
+
+    from models import Data, Signal, SignalType
 
     @app.route('/')
     def index():
@@ -228,80 +226,40 @@ def create_app():
             return jsonify({
                 "error": f"Internal server error: {str(e)}"
             }), 500
-
-    @app.route('/api/run-etl', methods=['POST'])
-    def run_etl():
-        """
-        API endpoint to manually trigger the ETL process
-        """
-        try:
-            # Get parameters from request
-            data = request.get_json() or {}
-            days = data.get('days', 1)
-            
-            # Limit max days to 30 for safety
-            days = min(max(1, days), 30)
-            
-            # Import and run ETL process
-            from init_db import process_etl_data
-            
-            # Process data for the specified number of days
-            records_processed = process_etl_data(days=days)
-            
-            return jsonify({
-                "status": "success",
-                "message": f"ETL process completed successfully",
-                "records_processed": records_processed,
-                "days_processed": days,
-                "timestamp": datetime.now().isoformat()
-            })
-        
-        except Exception as e:
-            logger.error(f"Error running ETL process: {str(e)}")
-            return jsonify({
-                "status": "error",
-                "error": f"Error running ETL process: {str(e)}"
-            }), 500
-
     @app.route('/api/generate-data', methods=['POST'])
     def generate_data():
-        """
-        API endpoint to generate new sample data
-        """
         try:
-            # Get parameters from request
             data = request.get_json() or {}
             days = data.get('days', 3)
             frequency = data.get('frequency', '1min')
-            
-            # Limit parameters for safety
+
             days = min(max(1, days), 30)
             valid_frequencies = ['1min', '5min', '10min']
             if frequency not in valid_frequencies:
                 frequency = '1min'
-            
-            # Run data generation
-            from init_db import generate_random_data
-            
-            # Generate new data
+
             start_date = datetime.now() - timedelta(days=days)
-            df = generate_random_data(start_date, days=days, frequency=frequency)
-            
-            # Save to database
-            record_count = 0
-            if not df.empty:
-                for _, row in df.iterrows():
-                    data = Data(
-                        timestamp=row['timestamp'],
-                        wind_speed=row['wind_speed'],
-                        power=row['power'],
-                        ambient_temperature=row['ambient_temperature']
-                    )
-                    db.session.add(data)
-                    record_count += 1
-                
-                db.session.commit()
-            
+
+            with current_app.app_context():
+                from init_db import generate_random_data
+                df = generate_random_data(start_date, days=days, frequency=frequency)
+
+                # salvar no banco
+                from models import Data, db
+                record_count = 0
+                if not df.empty:
+                    for _, row in df.iterrows():
+                        record = Data(
+                            timestamp=row['timestamp'],
+                            wind_speed=row['wind_speed'],
+                            power=row['power'],
+                            ambient_temperature=row['ambient_temperature']
+                        )
+                        db.session.add(record)
+                        record_count += 1
+
+                    db.session.commit()
+
             return jsonify({
                 "status": "success",
                 "message": f"Generated {record_count} data points with {frequency} frequency",
@@ -310,14 +268,13 @@ def create_app():
                 "frequency": frequency,
                 "timestamp": datetime.now().isoformat()
             })
-        
+
         except Exception as e:
             logger.error(f"Error generating data: {str(e)}")
             return jsonify({
                 "status": "error",
                 "error": f"Error generating data: {str(e)}"
             }), 500
-        
     return app
 
 if __name__ == '__main__':

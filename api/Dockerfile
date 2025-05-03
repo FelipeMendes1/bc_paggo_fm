@@ -2,11 +2,20 @@ FROM python:3.9-slim
 
 WORKDIR /app
 
-# Install dependencies
-RUN pip install --no-cache-dir fastapi uvicorn sqlalchemy psycopg2-binary pandas
+# Instala dependências do sistema (úteis para psycopg2 e outras libs)
+RUN apt-get update && apt-get install -y \
+  gcc \
+  libpq-dev \
+  && rm -rf /var/lib/apt/lists/*
 
-# Copy application files
+# Copia os arquivos antes de instalar as dependências
+COPY requirements.txt .
+
+# Instala as dependências do Python com base no requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copia o restante da aplicação
 COPY . .
 
-# Command to run the application
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Comando para rodar a aplicação Flask
+CMD ["python", "main.py"]

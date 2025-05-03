@@ -3,11 +3,8 @@ import logging
 from datetime import datetime, timedelta
 import httpx
 import pandas as pd
-from models import Signal
-import psycopg2
+import psycopg2 
 import json
-
-
 # Configure logging
 logger = logging.getLogger(__name__)
 
@@ -167,7 +164,7 @@ def save_to_target_db(df):
                         timestamp,
                         signal_type_id,
                         float(row[column]),
-                        json(data_json)
+                        json.dumps(data_json)
                     ))
 
         if records:
@@ -189,6 +186,7 @@ def save_to_target_db(df):
             conn.close()
 
 def process_data_for_date(date):
+    from models import db, Signal
     try:
         # Convert date to datetime objects for start/end of day
         start_datetime = datetime.combine(date, datetime.min.time())

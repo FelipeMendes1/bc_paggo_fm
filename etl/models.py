@@ -1,8 +1,11 @@
 from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, JSON
-from sqlalchemy.orm import relationship
-from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import relationship 
+from extensions import db
+import sys
+import os
 
-db = SQLAlchemy()
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 
 class SignalType(db.Model):
     """
@@ -41,6 +44,20 @@ class Signal(db.Model):
             f"<Signal(id={self.id}, name={self.name}, timestamp={self.timestamp}, value={self.value})>"
         )
 
+class Data(db.Model):
+    """
+    Model for the raw input data table in the source database
+    """
+    __tablename__ = "data"
+
+    id = Column(Integer, primary_key=True)
+    timestamp = Column(DateTime, nullable=False, index=True)
+    wind_speed = Column(Float, nullable=False)
+    power = Column(Float, nullable=False)
+    ambient_temperature = Column(Float, nullable=False)
+
+    def __repr__(self):
+        return f"<Data(id={self.id}, timestamp={self.timestamp})>"
 
 class SignalData(db.Model):
     """
