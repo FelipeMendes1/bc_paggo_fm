@@ -1,0 +1,23 @@
+2025-05-03 23:43:56 +0000 - dagster - DEBUG - etl_pipeline_job - 07db3f0b-f628-4dad-b2ae-b0535e7ebede - 4275 - LOGS_CAPTURED - Started capturing logs in process (pid: 4275).
+2025-05-03 23:43:56 +0000 - dagster - DEBUG - etl_pipeline_job - 07db3f0b-f628-4dad-b2ae-b0535e7ebede - 4275 - load_data_op - STEP_START - Started execution of step "load_data_op".
+2025-05-03 23:43:56 +0000 - dagster - DEBUG - etl_pipeline_job - 07db3f0b-f628-4dad-b2ae-b0535e7ebede - load_data_op - Loading file from: /opt/dagster/app/dagster_home/storage/storage/07db3f0b-f628-4dad-b2ae-b0535e7ebede/transform_data_op/result using PickledObjectFilesystemIOManager...
+2025-05-03 23:43:56 +0000 - dagster - DEBUG - etl_pipeline_job - 07db3f0b-f628-4dad-b2ae-b0535e7ebede - 4275 - load_data_op - LOADED_INPUT - Loaded input "agg_df" using input manager "io_manager", from output "result" of step "transform_data_op"
+2025-05-03 23:43:56 +0000 - dagster - DEBUG - etl_pipeline_job - 07db3f0b-f628-4dad-b2ae-b0535e7ebede - 4275 - load_data_op - STEP_INPUT - Got input "agg_df" of type "Any". (Type check passed).
+2025-05-03 23:43:57 +0000 - dagster - ERROR - etl_pipeline_job - 07db3f0b-f628-4dad-b2ae-b0535e7ebede - 4275 - load_data_op - STEP_FAILURE - Execution of step "load_data_op" failed.
+
+dagster._core.errors.DagsterExecutionStepExecutionError: Error occurred while executing op "load_data_op"::
+
+TypeError: save_to_target_db() takes 1 positional argument but 2 were given
+
+Stack Trace:
+  File "/usr/local/lib/python3.9/site-packages/dagster/_core/execution/plan/utils.py", line 56, in op_execution_error_boundary
+    yield
+  File "/usr/local/lib/python3.9/site-packages/dagster/_utils/__init__.py", line 392, in iterate_with_context
+    next_output = next(iterator)
+  File "/usr/local/lib/python3.9/site-packages/dagster/_core/execution/plan/compute_generator.py", line 129, in _coerce_op_compute_fn_to_iterator
+    result = invoke_compute_fn(
+  File "/usr/local/lib/python3.9/site-packages/dagster/_core/execution/plan/compute_generator.py", line 117, in invoke_compute_fn
+    return fn(context, **args_to_pass) if context_arg_provided else fn(**args_to_pass)
+  File "/opt/dagster/app/dagster_defs/__init__.py", line 148, in load_data_op
+    records_saved = save_to_target_db(agg_df, db_session)
+

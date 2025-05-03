@@ -33,9 +33,9 @@ def fetch_data_from_api(start_date, end_date, columns=None):
         if columns:
             params["columns"] = ",".join(columns)
         
-        # Make API request
-        url = f"{SOURCE_API_URL}/data"
+        url = f"{SOURCE_API_URL}/api/data"
         logger.info(f"Fetching data from {url} with params: {params}")
+
         
         with httpx.Client(timeout=60.0) as client:
             response = client.get(url, params=params)

@@ -1,0 +1,25 @@
+2025-05-03 21:43:42 +0000 - dagster - DEBUG - etl_daily_job - 4220fbdd-2cb9-4ecd-b6af-4d592302995d - 1513 - LOGS_CAPTURED - Started capturing logs in process (pid: 1513).
+2025-05-03 21:43:42 +0000 - dagster - DEBUG - etl_daily_job - 4220fbdd-2cb9-4ecd-b6af-4d592302995d - 1513 - wind_power_signals - STEP_START - Started execution of step "wind_power_signals".
+2025-05-03 21:43:42 +0000 - dagster - DEBUG - etl_daily_job - 4220fbdd-2cb9-4ecd-b6af-4d592302995d - wind_power_signals - Loading 1 partitions...
+2025-05-03 21:43:43 +0000 - dagster - DEBUG - etl_daily_job - 4220fbdd-2cb9-4ecd-b6af-4d592302995d - wind_power_signals - Loading partition 2025-05-02 from /opt/dagster/app/dagster_home/storage/storage/aggregated_wind_power_data/2025-05-02 using PickledObjectFilesystemIOManager...
+2025-05-03 21:43:43 +0000 - dagster - DEBUG - etl_daily_job - 4220fbdd-2cb9-4ecd-b6af-4d592302995d - 1513 - wind_power_signals - LOADED_INPUT - Loaded input "aggregated_data" using input manager "io_manager", from output "result" of step "aggregated_wind_power_data"
+2025-05-03 21:43:43 +0000 - dagster - DEBUG - etl_daily_job - 4220fbdd-2cb9-4ecd-b6af-4d592302995d - 1513 - wind_power_signals - STEP_INPUT - Got input "aggregated_data" of type "Any". (Type check passed).
+INFO:etl.database:Target database tables created or already exist
+2025-05-03 21:43:43 +0000 - dagster - ERROR - etl_daily_job - 4220fbdd-2cb9-4ecd-b6af-4d592302995d - 1513 - wind_power_signals - STEP_FAILURE - Execution of step "wind_power_signals" failed.
+
+dagster._core.errors.DagsterExecutionStepExecutionError: Error occurred while executing op "wind_power_signals"::
+
+TypeError: save_to_target_db() takes 1 positional argument but 2 were given
+
+Stack Trace:
+  File "/usr/local/lib/python3.9/site-packages/dagster/_core/execution/plan/utils.py", line 56, in op_execution_error_boundary
+    yield
+  File "/usr/local/lib/python3.9/site-packages/dagster/_utils/__init__.py", line 392, in iterate_with_context
+    next_output = next(iterator)
+  File "/usr/local/lib/python3.9/site-packages/dagster/_core/execution/plan/compute_generator.py", line 129, in _coerce_op_compute_fn_to_iterator
+    result = invoke_compute_fn(
+  File "/usr/local/lib/python3.9/site-packages/dagster/_core/execution/plan/compute_generator.py", line 117, in invoke_compute_fn
+    return fn(context, **args_to_pass) if context_arg_provided else fn(**args_to_pass)
+  File "/opt/dagster/app/dagster_defs/__init__.py", line 98, in wind_power_signals
+    records_saved = save_to_target_db(aggregated_data, db_session)
+

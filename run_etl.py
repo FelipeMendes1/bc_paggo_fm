@@ -11,6 +11,7 @@ import sys
 import logging
 from datetime import datetime, timedelta
 
+
 # Configurar logging
 logging.basicConfig(
     level=logging.INFO,

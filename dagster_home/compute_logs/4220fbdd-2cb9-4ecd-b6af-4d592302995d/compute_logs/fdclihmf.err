@@ -1,0 +1,8 @@
+2025-05-03 21:43:31 +0000 - dagster - DEBUG - etl_daily_job - 4220fbdd-2cb9-4ecd-b6af-4d592302995d - 1320 - LOGS_CAPTURED - Started capturing logs in process (pid: 1320).
+2025-05-03 21:43:31 +0000 - dagster - DEBUG - etl_daily_job - 4220fbdd-2cb9-4ecd-b6af-4d592302995d - 1320 - raw_wind_power_data - STEP_START - Started execution of step "raw_wind_power_data".
+2025-05-03 21:43:31 +0000 - dagster - INFO - etl_daily_job - 4220fbdd-2cb9-4ecd-b6af-4d592302995d - raw_wind_power_data - Fetched 1440 records for date 2025-05-02
+2025-05-03 21:43:31 +0000 - dagster - DEBUG - etl_daily_job - 4220fbdd-2cb9-4ecd-b6af-4d592302995d - 1320 - raw_wind_power_data - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
+2025-05-03 21:43:31 +0000 - dagster - DEBUG - etl_daily_job - 4220fbdd-2cb9-4ecd-b6af-4d592302995d - raw_wind_power_data - Writing file at: /opt/dagster/app/dagster_home/storage/storage/raw_wind_power_data/2025-05-02 using PickledObjectFilesystemIOManager...
+2025-05-03 21:43:32 +0000 - dagster - DEBUG - etl_daily_job - 4220fbdd-2cb9-4ecd-b6af-4d592302995d - 1320 - raw_wind_power_data - ASSET_MATERIALIZATION - Materialized value raw_wind_power_data.
+2025-05-03 21:43:32 +0000 - dagster - DEBUG - etl_daily_job - 4220fbdd-2cb9-4ecd-b6af-4d592302995d - 1320 - raw_wind_power_data - HANDLED_OUTPUT - Handled output "result" using IO manager "io_manager"
+2025-05-03 21:43:32 +0000 - dagster - DEBUG - etl_daily_job - 4220fbdd-2cb9-4ecd-b6af-4d592302995d - 1320 - raw_wind_power_data - STEP_SUCCESS - Finished execution of step "raw_wind_power_data" in 1.0s.

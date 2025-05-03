@@ -3,6 +3,10 @@ import sys
 from datetime import datetime, timedelta
 from transform import process_data_for_date
 from database import init_target_db
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Configure logging
 logging.basicConfig(

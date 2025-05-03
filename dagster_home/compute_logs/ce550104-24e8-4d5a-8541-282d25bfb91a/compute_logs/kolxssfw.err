@@ -1,0 +1,6 @@
+2025-05-03 21:25:07 +0000 - dagster - DEBUG - etl_pipeline_job - ce550104-24e8-4d5a-8541-282d25bfb91a - 2666 - LOGS_CAPTURED - Started capturing logs in process (pid: 2666).
+2025-05-03 21:25:07 +0000 - dagster - DEBUG - etl_pipeline_job - ce550104-24e8-4d5a-8541-282d25bfb91a - 2666 - get_start_datetime - STEP_START - Started execution of step "get_start_datetime".
+2025-05-03 21:25:07 +0000 - dagster - DEBUG - etl_pipeline_job - ce550104-24e8-4d5a-8541-282d25bfb91a - 2666 - get_start_datetime - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
+2025-05-03 21:25:07 +0000 - dagster - DEBUG - etl_pipeline_job - ce550104-24e8-4d5a-8541-282d25bfb91a - get_start_datetime - Writing file at: /opt/dagster/app/dagster_home/storage/storage/ce550104-24e8-4d5a-8541-282d25bfb91a/get_start_datetime/result using PickledObjectFilesystemIOManager...
+2025-05-03 21:25:08 +0000 - dagster - DEBUG - etl_pipeline_job - ce550104-24e8-4d5a-8541-282d25bfb91a - 2666 - get_start_datetime - HANDLED_OUTPUT - Handled output "result" using IO manager "io_manager"
+2025-05-03 21:25:08 +0000 - dagster - DEBUG - etl_pipeline_job - ce550104-24e8-4d5a-8541-282d25bfb91a - 2666 - get_start_datetime - STEP_SUCCESS - Finished execution of step "get_start_datetime" in 382ms.

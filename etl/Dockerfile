@@ -10,7 +10,9 @@ RUN pip install --no-cache-dir \
   httpx \
   numpy \
   dagster \
-  dagit
+  dagit\
+  flask_sqlalchemy\
+  flask
 
 # Copy application files
 COPY . .

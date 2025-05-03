@@ -1,4 +1,4 @@
-from main import db
+from extensions import db
 from sqlalchemy import JSON
 from datetime import datetime
 

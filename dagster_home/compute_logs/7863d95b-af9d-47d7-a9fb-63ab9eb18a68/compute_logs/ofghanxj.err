@@ -1,0 +1,12 @@
+2025-05-03 23:46:39 +0000 - dagster - DEBUG - etl_daily_job - 7863d95b-af9d-47d7-a9fb-63ab9eb18a68 - 7371 - LOGS_CAPTURED - Started capturing logs in process (pid: 7371).
+2025-05-03 23:46:39 +0000 - dagster - DEBUG - etl_daily_job - 7863d95b-af9d-47d7-a9fb-63ab9eb18a68 - 7371 - aggregated_wind_power_data - STEP_START - Started execution of step "aggregated_wind_power_data".
+2025-05-03 23:46:40 +0000 - dagster - DEBUG - etl_daily_job - 7863d95b-af9d-47d7-a9fb-63ab9eb18a68 - aggregated_wind_power_data - Loading 1 partitions...
+2025-05-03 23:46:40 +0000 - dagster - DEBUG - etl_daily_job - 7863d95b-af9d-47d7-a9fb-63ab9eb18a68 - aggregated_wind_power_data - Loading partition 2025-04-27 from /opt/dagster/app/dagster_home/storage/storage/raw_wind_power_data/2025-04-27 using PickledObjectFilesystemIOManager...
+2025-05-03 23:46:40 +0000 - dagster - DEBUG - etl_daily_job - 7863d95b-af9d-47d7-a9fb-63ab9eb18a68 - 7371 - aggregated_wind_power_data - LOADED_INPUT - Loaded input "raw_data" using input manager "io_manager", from output "result" of step "raw_wind_power_data"
+2025-05-03 23:46:40 +0000 - dagster - DEBUG - etl_daily_job - 7863d95b-af9d-47d7-a9fb-63ab9eb18a68 - 7371 - aggregated_wind_power_data - STEP_INPUT - Got input "raw_data" of type "Any". (Type check passed).
+2025-05-03 23:46:40 +0000 - dagster - WARNING - etl_daily_job - 7863d95b-af9d-47d7-a9fb-63ab9eb18a68 - aggregated_wind_power_data - No source data available to aggregate
+2025-05-03 23:46:41 +0000 - dagster - DEBUG - etl_daily_job - 7863d95b-af9d-47d7-a9fb-63ab9eb18a68 - 7371 - aggregated_wind_power_data - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
+2025-05-03 23:46:41 +0000 - dagster - DEBUG - etl_daily_job - 7863d95b-af9d-47d7-a9fb-63ab9eb18a68 - aggregated_wind_power_data - Writing file at: /opt/dagster/app/dagster_home/storage/storage/aggregated_wind_power_data/2025-04-27 using PickledObjectFilesystemIOManager...
+2025-05-03 23:46:41 +0000 - dagster - DEBUG - etl_daily_job - 7863d95b-af9d-47d7-a9fb-63ab9eb18a68 - 7371 - aggregated_wind_power_data - ASSET_MATERIALIZATION - Materialized value aggregated_wind_power_data.
+2025-05-03 23:46:41 +0000 - dagster - DEBUG - etl_daily_job - 7863d95b-af9d-47d7-a9fb-63ab9eb18a68 - 7371 - aggregated_wind_power_data - HANDLED_OUTPUT - Handled output "result" using IO manager "io_manager"
+2025-05-03 23:46:41 +0000 - dagster - DEBUG - etl_daily_job - 7863d95b-af9d-47d7-a9fb-63ab9eb18a68 - 7371 - aggregated_wind_power_data - STEP_SUCCESS - Finished execution of step "aggregated_wind_power_data" in 1.71s.

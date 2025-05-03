@@ -275,9 +275,37 @@ def create_app():
                 "status": "error",
                 "error": f"Error generating data: {str(e)}"
             }), 500
+    @app.route("/api/run-etl", methods=["POST"])
+    def run_etl():
+        try:
+            from init_db import process_etl_data  
+            data = request.get_json() or {}
+            days = data.get('days', 1)
+            days = min(max(1, days), 30)
+
+            records_processed = process_etl_data(days=days)
+
+            # 🔍 Log para backend
+            logger.info(f"ETL processed records: {records_processed}")
+
+            return jsonify({
+                "status": "success",
+                "message": "ETL process completed successfully.",
+                "records_processed": records_processed
+            })
+        except Exception as e:
+            logger.error(f"Error running ETL: {str(e)}")
+            return jsonify({
+                "status": "error",
+                "message": str(e)
+            }), 500
+
+
     return app
 
+app = create_app()
+
 if __name__ == '__main__':
-    app = create_app()
     app.run(host='0.0.0.0', port=8000, debug=True)
+
 
