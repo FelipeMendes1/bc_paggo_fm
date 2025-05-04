@@ -19,8 +19,8 @@ The system ingests raw turbine data (wind speed, power, ambient temperature), ap
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-org/etl-wind-power.git
-cd etl-wind-power
+git clone https://github.com/FelipeMendes1/bc_paggo_fm.git
+cd DataPipelineSage
 ```
 
 ### 2. Build and start all services
