@@ -1,131 +1,70 @@
-# ETL Wind Power - Solução Completa de ETL
+# ETL Wind Power - Complete ETL Solution
 
-Este projeto implementa uma solução completa de ETL (Extract, Transform, Load) para dados de energia eólica, usando PostgreSQL, Python, Flask e Dagster para orquestração.
+This project provides a complete ETL (Extract, Transform, Load) pipeline for wind energy data using PostgreSQL, Python (Flask), and Dagster for orchestration.
 
-## Visão Geral
+## 🗂 Overview
 
-O sistema coleta dados brutos de turbinas eólicas (velocidade do vento, potência gerada, temperatura ambiente), transforma-os calculando estatísticas em janelas de tempo de 10 minutos, e carrega os dados processados em um banco de dados de destino para análise.
+The system ingests raw turbine data (wind speed, power, ambient temperature), applies transformations (10-minute statistical aggregation), and loads the processed data into a target database for analysis and visualization.
 
-![ETL Wind Power](/templates/static/img/dashboard.png)
+## 🧱 Architecture
 
-## Componentes do Sistema
+- **Source DB**: PostgreSQL storing raw sensor data.
+- **Target DB**: PostgreSQL storing aggregated signal data.
+- **API**: Flask service exposing REST endpoints.
+- **ETL Processor**: Handles extraction, transformation, and loading.
+- **Dagster**: Manages orchestration and scheduling of the ETL jobs.
 
-1. **Banco de Dados de Origem**: PostgreSQL contendo dados de série temporal com colunas:
-   - timestamp
-   - wind_speed (velocidade do vento em m/s)
-   - power (potência gerada em kW)
-   - ambient_temperature (temperatura ambiente em °C)
+## 🚀 Quick Start (with Docker Compose)
 
-2. **Interface Web e API**: Aplicação Flask fornecendo acesso aos dados brutos e transformados com capacidades de filtragem
+### 1. Clone the repository
 
-3. **Processo ETL**: Scripts Python que extraem dados do banco de origem, realizam transformações (agregações estatísticas) e carregam para o banco de destino
+```bash
+git clone https://github.com/your-org/etl-wind-power.git
+cd etl-wind-power
+```
 
-4. **Banco de Dados de Destino**: PostgreSQL com schema específico para armazenar dados transformados:
-   - SignalType (tipos de sinais processados)
-   - Signal (registros de sinais agregados)
-   - SignalData (metadados adicionais)
+### 2. Build and start all services
 
-5. **Orquestração Dagster**: Sistema de orquestração para agendamento de jobs ETL, monitoramento e recuperação de falhas
+```bash
+docker-compose up --build -d
+```
 
-## Requisitos do Projeto
+This will start:
+- `api`: Flask application
+- `etl`: ETL processor
+- `source_db`: PostgreSQL for raw data
+- `target_db`: PostgreSQL for processed data
+- `dagster-dagit`: Dagster web UI
+- `dagster-daemon`: Scheduler
 
-- Python 3.9+
-- PostgreSQL
-- Pacotes Python: 
-  - Flask
-  - Flask-SQLAlchemy
-  - Gunicorn
-  - HTTPX
-  - NumPy
-  - Pandas
-  - Psycopg2-binary
-  - SQLAlchemy
-  - Email-validator
-  - Dagster (opcional para orquestração)
-- Docker e Docker Compose (opcional, para execução em contêineres)
+### 3. Access interfaces
 
-## Como Iniciar
+- **API Dashboard**: http://localhost:8000  
+- **Dagster UI**: http://localhost:3000  
+- **Health Check**: http://localhost:8000/health  
+- **Docs Page**: http://localhost:8000/docs
 
-Este projeto oferece dois modos de execução:
+### 4. Shut down services
 
-### Modo Python (Replit ou Ambiente Local)
+```bash
+docker-compose down
+```
 
-1. Clone o repositório
-2. Instale as dependências:
-   ```bash
-   # Dependências principais
-   pip install flask flask-sqlalchemy gunicorn httpx numpy pandas psycopg2-binary sqlalchemy email-validator
-   
-   # Opcional para Dagster
-   pip install dagster dagit dagster-postgres dagster-docker
-   ```
-3. Execute o servidor Flask:
-   ```bash
-   gunicorn --bind 0.0.0.0:5000 main:app
-   ```
-4. Execute o ETL manualmente:
-   ```bash
-   python run_etl.py
-   ```
-5. Acesse o dashboard em: http://localhost:5000
+## 🔌 API Endpoints
 
-### Modo Docker (Ambiente Local com Docker)
+| Method | Endpoint              | Description                              |
+|--------|-----------------------|------------------------------------------|
+| GET    | `/api/data`           | Retrieve raw sensor data                 |
+| GET    | `/api/signals`        | Retrieve aggregated signal data          |
+| POST   | `/api/run-etl`        | Manually trigger ETL process             |
+| POST   | `/api/generate-data`  | Generate synthetic sample data           |
+| GET    | `/health`             | Health check                             |
 
-1. Clone o repositório
-2. Execute usando Docker Compose:
-   ```bash
-   # Iniciar todos os serviços
-   python run_etl.py --docker
-   
-   # Ou diretamente com Docker Compose
-   docker-compose up -d
-   ```
-3. Acesse o dashboard em: http://localhost:5000
-4. Acesse a interface Dagster em: http://localhost:3000
-5. Para parar os serviços:
-   ```bash
-   python run_etl.py --docker --stop
-   
-   # Ou diretamente com Docker Compose
-   docker-compose down
-   ```
+## ⚙️ ETL Flow
 
-## Endpoints da API
+1. **Extract**: Query raw data from source database.
+2. **Transform**: Resample and aggregate data into 10-minute intervals:
+   - `wind_speed`: mean, min, max, std
+   - `power`: mean, min, max, std
+3. **Load**: Save structured data to target database as signals
 
-- **GET /api/data**: Retorna dados brutos do banco de origem
-  - Parâmetros: start_date, end_date, columns
-  
-- **GET /api/signals**: Retorna dados transformados do banco de destino
-  - Parâmetros: start_date, end_date, signal_type
-  
-- **POST /api/run-etl**: Executa manualmente o processo ETL
-  - Parâmetros: days (número de dias para processar)
-  
-- **POST /api/generate-data**: Gera novos dados aleatórios
-  - Parâmetros: days, frequency
-
-## Processo ETL
-
-1. **Extração**: Dados brutos são extraídos do banco de origem com frequência de 1 minuto
-2. **Transformação**: Dados são agregados em janelas de 10 minutos calculando:
-   - Média (mean)
-   - Mínimo (min)
-   - Máximo (max)
-   - Desvio padrão (std)
-3. **Carregamento**: Dados transformados são armazenados no banco de destino como sinais categorizados
-
-## Arquitetura de Microserviços
-
-No modo Docker, o sistema opera como uma arquitetura de microserviços:
-
-- **source_db**: Banco de dados PostgreSQL para dados de origem
-- **target_db**: Banco de dados PostgreSQL para dados transformados
-- **api**: Serviço FastAPI para acesso aos dados de origem
-- **etl**: Serviço de processamento ETL
-- **db_init**: Serviço para inicialização e geração de dados de exemplo
-- **dagster-dagit**: Interface web Dagster para monitoramento
-- **dagster-daemon**: Daemon Dagster para execução de jobs
-
-## Documentação
-
-Acesse a documentação completa em: http://localhost:5000/docs
