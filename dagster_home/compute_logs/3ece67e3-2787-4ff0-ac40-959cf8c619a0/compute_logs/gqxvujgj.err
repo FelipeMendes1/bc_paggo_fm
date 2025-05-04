@@ -1,0 +1,12 @@
+2025-05-04 00:13:28 +0000 - dagster - DEBUG - etl_daily_job - 3ece67e3-2787-4ff0-ac40-959cf8c619a0 - 29578 - LOGS_CAPTURED - Started capturing logs in process (pid: 29578).
+2025-05-04 00:13:28 +0000 - dagster - DEBUG - etl_daily_job - 3ece67e3-2787-4ff0-ac40-959cf8c619a0 - 29578 - wind_power_signals - STEP_START - Started execution of step "wind_power_signals".
+2025-05-04 00:13:28 +0000 - dagster - DEBUG - etl_daily_job - 3ece67e3-2787-4ff0-ac40-959cf8c619a0 - wind_power_signals - Loading 1 partitions...
+2025-05-04 00:13:29 +0000 - dagster - DEBUG - etl_daily_job - 3ece67e3-2787-4ff0-ac40-959cf8c619a0 - wind_power_signals - Loading partition 2025-04-17 from /opt/dagster/app/dagster_home/storage/storage/aggregated_wind_power_data/2025-04-17 using PickledObjectFilesystemIOManager...
+2025-05-04 00:13:29 +0000 - dagster - DEBUG - etl_daily_job - 3ece67e3-2787-4ff0-ac40-959cf8c619a0 - 29578 - wind_power_signals - LOADED_INPUT - Loaded input "aggregated_data" using input manager "io_manager", from output "result" of step "aggregated_wind_power_data"
+2025-05-04 00:13:29 +0000 - dagster - DEBUG - etl_daily_job - 3ece67e3-2787-4ff0-ac40-959cf8c619a0 - 29578 - wind_power_signals - STEP_INPUT - Got input "aggregated_data" of type "Any". (Type check passed).
+2025-05-04 00:13:29 +0000 - dagster - WARNING - etl_daily_job - 3ece67e3-2787-4ff0-ac40-959cf8c619a0 - wind_power_signals - No aggregated data available to load
+2025-05-04 00:13:29 +0000 - dagster - DEBUG - etl_daily_job - 3ece67e3-2787-4ff0-ac40-959cf8c619a0 - 29578 - wind_power_signals - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
+2025-05-04 00:13:29 +0000 - dagster - DEBUG - etl_daily_job - 3ece67e3-2787-4ff0-ac40-959cf8c619a0 - wind_power_signals - Writing file at: /opt/dagster/app/dagster_home/storage/storage/wind_power_signals/2025-04-17 using PickledObjectFilesystemIOManager...
+2025-05-04 00:13:29 +0000 - dagster - DEBUG - etl_daily_job - 3ece67e3-2787-4ff0-ac40-959cf8c619a0 - 29578 - wind_power_signals - ASSET_MATERIALIZATION - Materialized value wind_power_signals.
+2025-05-04 00:13:30 +0000 - dagster - DEBUG - etl_daily_job - 3ece67e3-2787-4ff0-ac40-959cf8c619a0 - 29578 - wind_power_signals - HANDLED_OUTPUT - Handled output "result" using IO manager "io_manager"
+2025-05-04 00:13:30 +0000 - dagster - DEBUG - etl_daily_job - 3ece67e3-2787-4ff0-ac40-959cf8c619a0 - 29578 - wind_power_signals - STEP_SUCCESS - Finished execution of step "wind_power_signals" in 1.6s.

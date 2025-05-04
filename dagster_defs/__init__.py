@@ -95,7 +95,7 @@ def wind_power_signals(context, aggregated_data):
     # Save to target database
     db_session = get_db_session()
     try:
-        records_saved = save_to_target_db(aggregated_data, db_session)
+        records_saved = save_to_target_db(aggregated_data)
         
         context.log.info(f"Loaded {records_saved} signals into target database")
         return {"loaded": records_saved, "timestamp": datetime.now().isoformat()}
@@ -145,7 +145,7 @@ def load_data_op(agg_df):
     
     db_session = get_db_session()
     try:
-        records_saved = save_to_target_db(agg_df, db_session)
+        records_saved = save_to_target_db(agg_df)
         return {"loaded": records_saved}
     finally:
         db_session.close()

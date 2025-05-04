@@ -1,0 +1,29 @@
+2025-05-04 00:11:26 +0000 - dagster - DEBUG - etl_daily_job - a96ad8c6-8b0f-47c6-b2ad-e2fdb55a7e57 - 27150 - LOGS_CAPTURED - Started capturing logs in process (pid: 27150).
+2025-05-04 00:11:26 +0000 - dagster - DEBUG - etl_daily_job - a96ad8c6-8b0f-47c6-b2ad-e2fdb55a7e57 - 27150 - raw_wind_power_data - STEP_START - Started execution of step "raw_wind_power_data".
+No data returned from API for date range: 2025-04-04 00:00:00 to 2025-04-04 23:59:59.999999
+2025-05-04 00:11:27 +0000 - dagster - INFO - etl_daily_job - a96ad8c6-8b0f-47c6-b2ad-e2fdb55a7e57 - raw_wind_power_data - Fetched 0 records for date 2025-04-04
+2025-05-04 00:11:27 +0000 - dagster - DEBUG - etl_daily_job - a96ad8c6-8b0f-47c6-b2ad-e2fdb55a7e57 - 27150 - raw_wind_power_data - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
+2025-05-04 00:11:27 +0000 - dagster - ERROR - etl_daily_job - a96ad8c6-8b0f-47c6-b2ad-e2fdb55a7e57 - 27150 - raw_wind_power_data - STEP_FAILURE - Execution of step "raw_wind_power_data" failed.
+
+dagster._core.errors.DagsterExecutionHandleOutputError: Error occurred while handling output "result" of step "raw_wind_power_data"::
+
+dagster_shared.check.functions.CheckError: Invariant failed. Description: Partition key range start 2025-04-04 is before the partitions definition start time 2025-04-04 00:11:26.337934+00:00
+
+Stack Trace:
+  File "/usr/local/lib/python3.9/site-packages/dagster/_core/execution/plan/utils.py", line 56, in op_execution_error_boundary
+    yield
+  File "/usr/local/lib/python3.9/site-packages/dagster/_utils/__init__.py", line 392, in iterate_with_context
+    next_output = next(iterator)
+  File "/usr/local/lib/python3.9/site-packages/dagster/_core/execution/plan/execute_step.py", line 772, in _gen_fn
+    gen_output = output_manager.handle_output(output_context, output.value)
+  File "/usr/local/lib/python3.9/site-packages/dagster/_core/storage/upath_io_manager.py", line 431, in handle_output
+    paths = self._get_paths_for_partitions(context)
+  File "/usr/local/lib/python3.9/site-packages/dagster/_core/storage/upath_io_manager.py", line 242, in _get_paths_for_partitions
+    for partition_key in context.asset_partition_keys
+  File "/usr/local/lib/python3.9/site-packages/dagster/_core/execution/context/output.py", line 487, in asset_partition_keys
+    return self.asset_partitions_def.get_partition_keys_in_range(
+  File "/usr/local/lib/python3.9/site-packages/dagster/_core/definitions/time_window_partitions.py", line 917, in get_partition_keys_in_range
+    check.invariant(
+  File "/usr/local/lib/python3.9/site-packages/dagster_shared/check/functions.py", line 1695, in invariant
+    raise CheckError(f"Invariant failed. Description: {desc}")
+

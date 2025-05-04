@@ -1,0 +1,13 @@
+2025-05-04 00:15:35 +0000 - dagster - DEBUG - etl_pipeline_job - a11b0d1f-ffb8-4adf-887e-5d362fa8e3e3 - 32022 - LOGS_CAPTURED - Started capturing logs in process (pid: 32022).
+2025-05-04 00:15:35 +0000 - dagster - DEBUG - etl_pipeline_job - a11b0d1f-ffb8-4adf-887e-5d362fa8e3e3 - 32022 - transform_data_op - STEP_START - Started execution of step "transform_data_op".
+2025-05-04 00:15:35 +0000 - dagster - DEBUG - etl_pipeline_job - a11b0d1f-ffb8-4adf-887e-5d362fa8e3e3 - transform_data_op - Loading file from: /opt/dagster/app/dagster_home/storage/storage/a11b0d1f-ffb8-4adf-887e-5d362fa8e3e3/extract_data_op/result using PickledObjectFilesystemIOManager...
+2025-05-04 00:15:35 +0000 - dagster - DEBUG - etl_pipeline_job - a11b0d1f-ffb8-4adf-887e-5d362fa8e3e3 - 32022 - transform_data_op - LOADED_INPUT - Loaded input "df" using input manager "io_manager", from output "result" of step "extract_data_op"
+2025-05-04 00:15:35 +0000 - dagster - DEBUG - etl_pipeline_job - a11b0d1f-ffb8-4adf-887e-5d362fa8e3e3 - 32022 - transform_data_op - STEP_INPUT - Got input "df" of type "Any". (Type check passed).
+/opt/dagster/app/etl/transform.py:91: FutureWarning: 'T' is deprecated and will be removed in a future version, please use 'min' instead.
+  wind_speed_agg = df["wind_speed"].resample(rule).agg(["mean", "min", "max", "std"])
+/opt/dagster/app/etl/transform.py:95: FutureWarning: 'T' is deprecated and will be removed in a future version, please use 'min' instead.
+  power_agg = df["power"].resample(rule).agg(["mean", "min", "max", "std"])
+2025-05-04 00:15:35 +0000 - dagster - DEBUG - etl_pipeline_job - a11b0d1f-ffb8-4adf-887e-5d362fa8e3e3 - 32022 - transform_data_op - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
+2025-05-04 00:15:35 +0000 - dagster - DEBUG - etl_pipeline_job - a11b0d1f-ffb8-4adf-887e-5d362fa8e3e3 - transform_data_op - Writing file at: /opt/dagster/app/dagster_home/storage/storage/a11b0d1f-ffb8-4adf-887e-5d362fa8e3e3/transform_data_op/result using PickledObjectFilesystemIOManager...
+2025-05-04 00:15:35 +0000 - dagster - DEBUG - etl_pipeline_job - a11b0d1f-ffb8-4adf-887e-5d362fa8e3e3 - 32022 - transform_data_op - HANDLED_OUTPUT - Handled output "result" using IO manager "io_manager"
+2025-05-04 00:15:35 +0000 - dagster - DEBUG - etl_pipeline_job - a11b0d1f-ffb8-4adf-887e-5d362fa8e3e3 - 32022 - transform_data_op - STEP_SUCCESS - Finished execution of step "transform_data_op" in 416ms.
